@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build outputs
+.next/
+dist/
+.turbo/
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# prisma
+apps/api/prisma/*.db
+
+# logs
+*.log
