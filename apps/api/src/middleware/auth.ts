@@ -1,6 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import { createClient } from "@supabase/supabase-js";
-import type { Env, AppVariables, UserRole } from "../types.js";
+import type { Env, AppVariables, UserRole } from "../types";
 
 /**
  * Auth middleware: verifies Supabase JWT from Authorization header,

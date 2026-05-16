@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { createClient } from "@supabase/supabase-js";
-import type { Env, AppVariables } from "../types.js";
+import type { Env, AppVariables } from "../types";
 
 const emailRoutes = new Hono<{ Bindings: Env; Variables: AppVariables }>();
 

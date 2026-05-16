@@ -1,4 +1,4 @@
-import type { Env } from "../types.js";
+import type { Env } from "../types";
 import { createClient } from "@supabase/supabase-js";
 
 const RESEND_API = "https://api.resend.com";

@@ -1,4 +1,4 @@
-import { CONVERSATION_STATUSES, PRIORITIES } from './constants.js';
+import { CONVERSATION_STATUSES, PRIORITIES } from './constants';
 
 export function isValidConversationStatus(
   status: string,

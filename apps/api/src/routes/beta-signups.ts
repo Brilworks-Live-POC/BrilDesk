@@ -1,8 +1,8 @@
 import { Hono } from "hono";
-import type { Env, AppVariables } from "../types.js";
+import type { Env, AppVariables } from "../types";
 import { createClient } from "@supabase/supabase-js";
-import { sendEmail } from "../services/email.js";
-import { renderTemplate } from "../services/email-templates.js";
+import { sendEmail } from "../services/email";
+import { renderTemplate } from "../services/email-templates";
 
 const betaSignups = new Hono<{ Bindings: Env; Variables: AppVariables }>();
 

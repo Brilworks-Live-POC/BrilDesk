@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { z } from "zod";
-import type { Env, AppVariables } from "../types.js";
+import type { Env, AppVariables } from "../types";
 
 const app = new Hono<{ Bindings: Env; Variables: AppVariables }>();
 

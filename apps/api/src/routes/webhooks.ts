@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { createClient } from "@supabase/supabase-js";
-import type { Env } from "../types.js";
+import type { Env } from "../types";
 
 const app = new Hono<{ Bindings: Env }>();
 

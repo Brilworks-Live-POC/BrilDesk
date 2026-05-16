@@ -8,7 +8,7 @@
  *    Use only for admin/system operations (webhooks, cron, superadmin views).
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "./database.types.js";
+import type { Database } from "./database.types";
 
 export type TypedSupabaseClient = SupabaseClient<Database>;
 
@@ -53,4 +53,4 @@ export function createServiceClient(env: SupabaseEnv): TypedSupabaseClient {
   });
 }
 
-export type { Database, Tables, InsertDto, UpdateDto, Enums, Json } from "./database.types.js";
+export type { Database, Tables, InsertDto, UpdateDto, Enums, Json } from "./database.types";
