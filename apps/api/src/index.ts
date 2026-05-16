@@ -5,6 +5,7 @@ import { authMiddleware } from "./middleware/auth.js";
 import type { Env, AppVariables } from "./types.js";
 
 import healthRoutes from "./routes/health.js";
+import betaSignupRoutes from "./routes/beta-signups.js";
 import conversationRoutes from "./routes/conversations.js";
 import messageRoutes from "./routes/messages.js";
 import profileRoutes from "./routes/profiles.js";
@@ -29,6 +30,7 @@ app.use(
 // ---- Public routes (no auth) ----
 app.route("/health", healthRoutes);
 app.route("/api/webhooks", webhookRoutes);
+app.route("/api/beta-signups", betaSignupRoutes);
 
 // ---- Protected routes ----
 const api = new Hono<{ Bindings: Env; Variables: AppVariables }>();

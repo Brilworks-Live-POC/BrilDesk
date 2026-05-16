@@ -20,10 +20,10 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               Compare
             </a>
             <a
-              href="/login"
+              href="/beta"
               className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
             >
-              Get Started Free
+              Join the Beta
             </a>
           </nav>
         </div>
