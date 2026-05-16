@@ -1,68 +1,138 @@
-import { FastifyInstance } from 'fastify';
-import { prisma } from '../lib/prisma.js';
+import { Hono } from "hono";
+import { z } from "zod";
+import type { Env, AppVariables } from "../types.js";
 
-export default async function conversationRoutes(fastify: FastifyInstance) {
-  // List conversations
-  fastify.get('/api/conversations', async (request, reply) => {
-    const { status, assignedToId, page = '1', limit = '25' } = request.query as Record<string, string>;
+const app = new Hono<{ Bindings: Env; Variables: AppVariables }>();
 
-    const where: Record<string, unknown> = {};
-    if (status) where.status = status;
-    if (assignedToId) where.assignedToId = assignedToId;
+/**
+ * GET /api/conversations — list with pagination and filters
+ */
+app.get("/", async (c) => {
+  const user = c.get("user");
+  const supabase = c.get("supabase");
 
-    const pageNum = Math.max(1, parseInt(page));
-    const pageSize = Math.min(100, Math.max(1, parseInt(limit)));
+  const page = Math.max(1, Number(c.req.query("page") ?? 1));
+  const limit = Math.min(100, Math.max(1, Number(c.req.query("limit") ?? 20)));
+  const offset = (page - 1) * limit;
+  const status = c.req.query("status");
+  const assignee = c.req.query("assignee");
 
-    const [conversations, total] = await Promise.all([
-      prisma.conversation.findMany({
-        where,
-        include: {
-          assignedTo: { select: { id: true, name: true, avatarUrl: true } },
-          messages: { orderBy: { timestamp: 'desc' }, take: 1 },
-        },
-        orderBy: { lastMessageAt: 'desc' },
-        skip: (pageNum - 1) * pageSize,
-        take: pageSize,
-      }),
-      prisma.conversation.count({ where }),
-    ]);
+  let query = supabase
+    .from("conversations")
+    .select("*, assigned_to:profiles!assigned_to_id(id, name, email)", {
+      count: "exact",
+    })
+    .order("last_message_at", { ascending: false, nullsFirst: false })
+    .range(offset, offset + limit - 1);
 
-    return reply.send({ data: conversations, total, page: pageNum, limit: pageSize });
+  // For non-superadmin, filter by team
+  if (user.role !== "superadmin" && user.team_id) {
+    query = query.eq("team_id", user.team_id);
+  }
+
+  if (status) {
+    query = query.eq("status", status);
+  }
+  if (assignee) {
+    query = query.eq("assigned_to_id", assignee);
+  }
+
+  const { data, error, count } = await query;
+
+  if (error) {
+    return c.json({ error: error.message }, 500);
+  }
+
+  return c.json({
+    data,
+    pagination: { page, limit, total: count ?? 0 },
   });
+});
 
-  // Get single conversation with messages
-  fastify.get('/api/conversations/:id', async (request, reply) => {
-    const { id } = request.params as { id: string };
+/**
+ * GET /api/conversations/:id — single conversation with messages
+ */
+app.get("/:id", async (c) => {
+  const supabase = c.get("supabase");
+  const id = c.req.param("id");
 
-    const conversation = await prisma.conversation.findUnique({
-      where: { id },
-      include: {
-        assignedTo: { select: { id: true, name: true, avatarUrl: true } },
-        messages: { orderBy: { timestamp: 'asc' } },
-        team: { select: { id: true, name: true } },
-      },
-    });
+  const { data: conversation, error } = await supabase
+    .from("conversations")
+    .select("*, assigned_to:profiles!assigned_to_id(id, name, email)")
+    .eq("id", id)
+    .single();
 
-    if (!conversation) {
-      return reply.status(404).send({ error: 'Conversation not found' });
-    }
+  if (error || !conversation) {
+    return c.json({ error: "Conversation not found" }, 404);
+  }
 
-    return reply.send(conversation);
-  });
+  const { data: messages } = await supabase
+    .from("messages")
+    .select("*")
+    .eq("conversation_id", id)
+    .order("timestamp", { ascending: true });
 
-  // Assign conversation
-  fastify.patch('/api/conversations/:id/assign', async (request, reply) => {
-    const { id } = request.params as { id: string };
-    const { assignedToId } = request.body as { assignedToId: string | null };
+  return c.json({ data: { ...conversation, messages: messages ?? [] } });
+});
 
-    const conversation = await prisma.conversation.update({
-      where: { id },
-      data: { assignedToId },
-      include: {
-        assignedTo: { select: { id: true, name: true, avatarUrl: true } },
-      },
-    });
+const assignSchema = z.object({ assigned_to_id: z.string().uuid() });
 
-    return reply.send(conversation);
-  });
-}
+/**
+ * PATCH /api/conversations/:id/assign — assign agent
+ */
+app.patch("/:id/assign", async (c) => {
+  const supabase = c.get("supabase");
+  const id = c.req.param("id");
+
+  const body = await c.req.json();
+  const parsed = assignSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json({ error: parsed.error.flatten() }, 400);
+  }
+
+  const { data, error } = await supabase
+    .from("conversations")
+    .update({ assigned_to_id: parsed.data.assigned_to_id })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    return c.json({ error: error.message }, 500);
+  }
+
+  return c.json({ data });
+});
+
+const statusSchema = z.object({
+  status: z.enum(["open", "waiting", "resolved", "closed"]),
+});
+
+/**
+ * PATCH /api/conversations/:id/status — update status
+ */
+app.patch("/:id/status", async (c) => {
+  const supabase = c.get("supabase");
+  const id = c.req.param("id");
+
+  const body = await c.req.json();
+  const parsed = statusSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json({ error: parsed.error.flatten() }, 400);
+  }
+
+  const { data, error } = await supabase
+    .from("conversations")
+    .update({ status: parsed.data.status })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    return c.json({ error: error.message }, 500);
+  }
+
+  return c.json({ data });
+});
+
+export default app;

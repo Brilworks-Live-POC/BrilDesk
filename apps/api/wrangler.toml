@@ -1,0 +1,23 @@
+name = "brildesk-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Non-secret env vars can go here for dev; secrets via `wrangler secret put`
+# SUPABASE_URL = ""
+# SUPABASE_ANON_KEY = ""
+
+# Secrets (set via `wrangler secret put <NAME>`):
+#   SUPABASE_URL
+#   SUPABASE_ANON_KEY
+#   SUPABASE_SERVICE_ROLE_KEY
+#   WHATSAPP_VERIFY_TOKEN
+#   WHATSAPP_ACCESS_TOKEN
+#   WHATSAPP_PHONE_NUMBER_ID
+
+[env.production]
+name = "brildesk-api-production"
+
+[env.staging]
+name = "brildesk-api-staging"
