@@ -4,26 +4,29 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
-    "build": "next build",
-    "start": "next start",
+    "build": "npx @cloudflare/next-on-pages",
+    "preview": "npx wrangler pages dev .vercel/output/static --compatibility-flags=nodejs_compat",
+    "deploy": "npx wrangler pages deploy .vercel/output/static",
     "typecheck": "tsc --noEmit",
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/core": "0.41.2",
     "@brildesk/shared": "workspace:*",
+    "@brildesk/supabase": "workspace:*",
+    "@cloudflare/next-on-pages": "^1.13.16",
+    "@supabase/supabase-js": "^2.49.0",
+    "@supabase/ssr": "^0.6.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.500.0",
     "next": "^15.3.0",
-    "next-auth": "^5.0.0-beta.28",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "socket.io-client": "^4.8.0",
     "tailwind-merge": "^3.0.0"
   },
   "devDependencies": {
     "@brildesk/tsconfig": "workspace:*",
+    "@cloudflare/workers-types": "^4.20260516.1",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.1.0",
@@ -32,6 +35,8 @@
     "eslint-config-next": "^15.3.0",
     "postcss": "^8.5.0",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vercel": "^54.1.0",
+    "wrangler": "^4.92.0"
   }
 }

@@ -41,6 +41,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       profiles: {
         Row: {
@@ -73,6 +74,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       conversations: {
         Row: {
@@ -111,6 +113,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       messages: {
         Row: {
@@ -155,6 +158,7 @@ export type Database = {
           timestamp?: string;
           created_at?: string;
         };
+        Relationships: [];
       };
       routing_rules: {
         Row: {
@@ -184,6 +188,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       quick_replies: {
         Row: {
@@ -213,6 +218,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       audit_logs: {
         Row: {
@@ -242,6 +248,7 @@ export type Database = {
           details?: Json | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       tags: {
         Row: {
@@ -265,6 +272,7 @@ export type Database = {
           team_id?: string;
           created_at?: string;
         };
+        Relationships: [];
       };
       conversation_tags: {
         Row: {
@@ -282,7 +290,41 @@ export type Database = {
           tag_id?: string;
           created_at?: string;
         };
+        Relationships: [];
       };
+      beta_signups: {
+        Row: {
+          id: string;
+          email: string;
+          company_name: string | null;
+          team_size: string | null;
+          use_case: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          company_name?: string | null;
+          team_size?: string | null;
+          use_case?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          company_name?: string | null;
+          team_size?: string | null;
+          use_case?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
     };
     Enums: {
       user_role: "agent" | "manager" | "admin" | "superadmin";
@@ -291,6 +333,9 @@ export type Database = {
       sender_type: "contact" | "agent" | "system";
       message_status: "sent" | "delivered" | "read" | "failed";
       routing_type: "round_robin" | "least_busy" | "manual";
+    };
+    CompositeTypes: {
+      [_ in never]: never;
     };
   };
 };
