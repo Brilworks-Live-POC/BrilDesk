@@ -4,6 +4,7 @@ import { logger } from "hono/logger";
 import { authMiddleware } from "./middleware/auth.js";
 import type { Env, AppVariables } from "./types.js";
 
+import healthRoutes from "./routes/health.js";
 import conversationRoutes from "./routes/conversations.js";
 import messageRoutes from "./routes/messages.js";
 import profileRoutes from "./routes/profiles.js";
@@ -26,9 +27,7 @@ app.use(
 );
 
 // ---- Public routes (no auth) ----
-app.get("/health", (c) =>
-  c.json({ status: "ok", timestamp: new Date().toISOString() }),
-);
+app.route("/health", healthRoutes);
 app.route("/api/webhooks", webhookRoutes);
 
 // ---- Protected routes ----
