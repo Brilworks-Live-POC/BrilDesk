@@ -1,5 +1,5 @@
 export const CONVERSATION_STATUSES = ['open', 'waiting', 'resolved', 'closed'] as const;
-export const USER_ROLES = ['admin', 'manager', 'agent'] as const;
+export const USER_ROLES = ['superadmin', 'admin', 'manager', 'agent'] as const;
 export const MESSAGE_STATUSES = ['sent', 'delivered', 'read', 'failed'] as const;
 export const ROUTING_TYPES = ['round_robin', 'least_busy', 'manual'] as const;
 export const PRIORITIES = ['low', 'medium', 'high', 'urgent'] as const;

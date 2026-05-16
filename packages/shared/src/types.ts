@@ -1,5 +1,5 @@
 // User roles
-export type UserRole = 'admin' | 'manager' | 'agent';
+export type UserRole = 'superadmin' | 'admin' | 'manager' | 'agent';
 
 // Conversation status
 export type ConversationStatus = 'open' | 'waiting' | 'resolved' | 'closed';

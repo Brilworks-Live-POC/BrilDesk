@@ -9,9 +9,15 @@
     "db:generate": "pnpm --filter @brildesk/api db:generate",
     "db:migrate": "pnpm --filter @brildesk/api db:migrate",
     "db:seed": "pnpm --filter @brildesk/api db:seed",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:migrate": "supabase migration up",
+    "supabase:gen-types": "pnpm --filter @brildesk/supabase gen:types",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "devDependencies": {
+    "supabase": "^2.22.0",
     "turbo": "^2.5.0",
     "prettier": "^3.5.0"
   },
@@ -24,6 +30,7 @@
       "@prisma/client",
       "@prisma/engines",
       "prisma",
+      "supabase",
       "esbuild",
       "sharp",
       "unrs-resolver"
