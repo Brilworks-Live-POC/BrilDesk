@@ -11,6 +11,7 @@ import messageRoutes from "./routes/messages.js";
 import profileRoutes from "./routes/profiles.js";
 import quickReplyRoutes from "./routes/quick-replies.js";
 import webhookRoutes from "./routes/webhooks.js";
+import emailRoutes from "./routes/email.js";
 import adminRoutes from "./routes/admin.js";
 
 const app = new Hono<{ Bindings: Env; Variables: AppVariables }>();
@@ -31,6 +32,7 @@ app.use(
 app.route("/health", healthRoutes);
 app.route("/api/webhooks", webhookRoutes);
 app.route("/api/beta-signups", betaSignupRoutes);
+app.route("/api/email", emailRoutes);
 
 // ---- Protected routes ----
 const api = new Hono<{ Bindings: Env; Variables: AppVariables }>();

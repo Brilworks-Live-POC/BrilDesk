@@ -10,6 +10,10 @@ export interface Env {
   WHATSAPP_VERIFY_TOKEN: string;
   WHATSAPP_ACCESS_TOKEN: string;
   WHATSAPP_PHONE_NUMBER_ID: string;
+  RESEND_API_KEY: string;
+  RESEND_WEBHOOK_SECRET?: string;
+  EMAIL_FROM_ADDRESS?: string;
+  API_BASE_URL?: string;
 }
 
 export type UserRole = "agent" | "manager" | "admin" | "superadmin";

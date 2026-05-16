@@ -1,6 +1,8 @@
 import { Hono } from "hono";
 import type { Env, AppVariables } from "../types.js";
 import { createClient } from "@supabase/supabase-js";
+import { sendEmail } from "../services/email.js";
+import { renderTemplate } from "../services/email-templates.js";
 
 const betaSignups = new Hono<{ Bindings: Env; Variables: AppVariables }>();
 
@@ -78,11 +80,32 @@ betaSignups.post("/", async (c) => {
     return c.json({ error: "Failed to create signup" }, 500);
   }
 
+  // Send signup confirmation email (fire-and-forget, don't block response)
+  const baseUrl = c.env.API_BASE_URL || "https://api.brildesk.com";
+  const referralUrl = `https://brildesk.com?ref=${signup!.referral_code}`;
+  const confirmationTemplate = renderTemplate("signup-confirmation", {
+    name,
+    queue_position: String(signup!.queue_position),
+    referral_code: signup!.referral_code,
+    referral_url: referralUrl,
+  });
+  if (confirmationTemplate) {
+    c.executionCtx.waitUntil(
+      sendEmail(c.env, {
+        to: email,
+        subject: confirmationTemplate.subject,
+        html: confirmationTemplate.html,
+        templateKey: "signup-confirmation",
+        category: "transactional",
+      }),
+    );
+  }
+
   // If referred by someone, increment their referral count and move them up
   if (referral) {
     const { data: referrer } = await supabase
       .from("beta_signups")
-      .select("id, queue_position, referral_count")
+      .select("id, queue_position, referral_count, email, name")
       .eq("referral_code", referral)
       .single();
 
@@ -95,6 +118,27 @@ betaSignups.post("/", async (c) => {
           queue_position: newPosition,
         })
         .eq("id", referrer.id);
+
+      // Notify referrer via email (fire-and-forget)
+      if (referrer.email) {
+        const referrerUrl = `https://brildesk.com?ref=${referral}`;
+        const notifTemplate = renderTemplate("referral-notification", {
+          name: referrer.name || "there",
+          new_position: String(newPosition),
+          referral_url: referrerUrl,
+        });
+        if (notifTemplate) {
+          c.executionCtx.waitUntil(
+            sendEmail(c.env, {
+              to: referrer.email,
+              subject: notifTemplate.subject,
+              html: notifTemplate.html,
+              templateKey: "referral-notification",
+              category: "transactional",
+            }),
+          );
+        }
+      }
     }
   }
 
