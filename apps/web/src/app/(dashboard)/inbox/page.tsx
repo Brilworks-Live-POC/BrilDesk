@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useAuth } from '@/components/providers/auth-provider';
 import { useRealtimeConversations } from '@/hooks/use-realtime-conversations';
 import { useRealtimeMessages } from '@/hooks/use-realtime-messages';
 import { usePresence } from '@/hooks/use-presence';
+import { useTypingIndicator } from '@/hooks/use-typing-indicator';
 import { sendMessage } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import type { Tables } from '@brildesk/supabase/types';
+import type { AgentStatus } from '@/hooks/use-presence';
 
 type Conversation = Tables<'conversations'>;
 
@@ -19,9 +21,21 @@ export default function InboxPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { messages, loading: msgLoading } = useRealtimeMessages(selectedId);
   const { onlineUsers } = usePresence(user?.teamId ?? null, user);
+  const { typingUsers, sendTyping, sendStopTyping } = useTypingIndicator(selectedId, user);
   const [messageText, setMessageText] = useState('');
   const [sending, setSending] = useState(false);
   const [filter, setFilter] = useState<'all' | 'assigned' | 'unassigned'>('all');
+  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setMessageText(e.target.value);
+      sendTyping();
+      if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+      typingTimerRef.current = setTimeout(() => sendStopTyping(), 2000);
+    },
+    [sendTyping, sendStopTyping],
+  );
 
   const selected = conversations.find((c) => c.id === selectedId);
 
@@ -35,6 +49,8 @@ export default function InboxPage() {
     e.preventDefault();
     if (!messageText.trim() || !selectedId) return;
     setSending(true);
+    sendStopTyping();
+    if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
     try {
       await sendMessage(selectedId, messageText.trim());
       setMessageText('');
@@ -82,11 +98,11 @@ export default function InboxPage() {
         </nav>
         {onlineUsers.length > 0 && (
           <div className="p-4 border-t border-gray-200 mt-auto">
-            <p className="text-xs font-medium text-gray-500 mb-2">Online</p>
+            <p className="text-xs font-medium text-gray-500 mb-2">Team</p>
             <div className="space-y-1">
               {onlineUsers.map((u) => (
                 <div key={u.id} className="flex items-center gap-2 text-xs text-gray-600">
-                  <span className="w-2 h-2 bg-green-500 rounded-full" />
+                  <StatusDot status={u.status} />
                   {u.name || u.email}
                 </div>
               ))}
@@ -166,13 +182,27 @@ export default function InboxPage() {
                     )}
                   >
                     <p>{msg.body ?? ''}</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {new Date(msg.timestamp).toLocaleTimeString()}
-                    </p>
+                    <div className="flex items-center justify-end gap-1 mt-1">
+                      <span className="text-xs text-gray-400">
+                        {new Date(msg.timestamp).toLocaleTimeString()}
+                      </span>
+                      {msg.direction === 'outbound' && (
+                        <MessageStatusIcon status={msg.status} />
+                      )}
+                    </div>
                   </div>
                 ))
               )}
             </div>
+
+            {/* Typing indicator */}
+            {typingUsers.length > 0 && (
+              <div className="px-6 py-1 text-xs text-gray-500 italic">
+                {typingUsers.length === 1
+                  ? `${typingUsers[0].name || 'Someone'} is typing...`
+                  : `${typingUsers.map((u) => u.name || 'Someone').join(', ')} are typing...`}
+              </div>
+            )}
 
             {/* Message input */}
             <form
@@ -183,7 +213,7 @@ export default function InboxPage() {
                 type="text"
                 placeholder="Type a message..."
                 value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
+                onChange={handleInputChange}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
               />
               <button
@@ -241,4 +271,54 @@ function ConversationItem({
       )}
     </button>
   );
+}
+
+function StatusDot({ status }: { status: AgentStatus }) {
+  return (
+    <span
+      className={cn(
+        'w-2 h-2 rounded-full flex-shrink-0',
+        status === 'online' && 'bg-green-500',
+        status === 'away' && 'bg-yellow-400',
+        status === 'offline' && 'bg-gray-300',
+      )}
+    />
+  );
+}
+
+function MessageStatusIcon({ status }: { status: string | null }) {
+  if (!status) return null;
+
+  // Single check for sent, double check for delivered, blue double check for read
+  switch (status) {
+    case 'sent':
+      return (
+        <svg className="w-3.5 h-3.5 text-gray-400" viewBox="0 0 16 16" fill="none">
+          <path d="M2 8.5l4 4L14 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'delivered':
+      return (
+        <svg className="w-3.5 h-3.5 text-gray-400" viewBox="0 0 16 16" fill="none">
+          <path d="M1 8.5l3.5 3.5L13 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4 8.5l3.5 3.5L16 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'read':
+      return (
+        <svg className="w-3.5 h-3.5 text-blue-500" viewBox="0 0 16 16" fill="none">
+          <path d="M1 8.5l3.5 3.5L13 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4 8.5l3.5 3.5L16 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'failed':
+      return (
+        <svg className="w-3.5 h-3.5 text-red-500" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
+          <path d="M8 5v4M8 11h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    default:
+      return null;
+  }
 }

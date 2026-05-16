@@ -6,9 +6,6 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "db:generate": "pnpm --filter @brildesk/api db:generate",
-    "db:migrate": "pnpm --filter @brildesk/api db:migrate",
-    "db:seed": "pnpm --filter @brildesk/api db:seed",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:reset": "supabase db reset",
@@ -27,9 +24,6 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "prisma",
       "supabase",
       "esbuild",
       "sharp",

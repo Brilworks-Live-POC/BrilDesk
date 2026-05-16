@@ -1,18 +1,54 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import type { RealtimePresenceState } from '@supabase/supabase-js';
 
-interface PresenceUser {
+export type AgentStatus = 'online' | 'away' | 'offline';
+
+export interface PresenceUser {
   id: string;
   email: string;
   name: string | null;
+  status: AgentStatus;
   onlineAt: string;
 }
 
-export function usePresence(teamId: string | null, currentUser: { id: string; email: string; name: string | null } | null) {
+const AWAY_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes of inactivity
+
+export function usePresence(
+  teamId: string | null,
+  currentUser: { id: string; email: string; name: string | null } | null,
+) {
   const [onlineUsers, setOnlineUsers] = useState<PresenceUser[]>([]);
+  const channelRef = useRef<ReturnType<ReturnType<typeof getSupabaseBrowserClient>['channel']> | null>(null);
+  const awayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const statusRef = useRef<AgentStatus>('online');
+
+  const updateStatus = useCallback(
+    (newStatus: AgentStatus) => {
+      if (!channelRef.current || !currentUser || statusRef.current === newStatus) return;
+      statusRef.current = newStatus;
+      channelRef.current.track({
+        id: currentUser.id,
+        email: currentUser.email,
+        name: currentUser.name,
+        status: newStatus,
+        onlineAt: new Date().toISOString(),
+      });
+    },
+    [currentUser],
+  );
+
+  const resetAwayTimer = useCallback(() => {
+    if (awayTimerRef.current) clearTimeout(awayTimerRef.current);
+    if (statusRef.current === 'away') {
+      updateStatus('online');
+    }
+    awayTimerRef.current = setTimeout(() => {
+      updateStatus('away');
+    }, AWAY_TIMEOUT_MS);
+  }, [updateStatus]);
 
   useEffect(() => {
     if (!teamId || !currentUser) return;
@@ -22,6 +58,7 @@ export function usePresence(teamId: string | null, currentUser: { id: string; em
     const channel = supabase.channel(`presence:team:${teamId}`, {
       config: { presence: { key: currentUser.id } },
     });
+    channelRef.current = channel;
 
     channel
       .on('presence', { event: 'sync' }, () => {
@@ -36,19 +73,37 @@ export function usePresence(teamId: string | null, currentUser: { id: string; em
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
+          statusRef.current = 'online';
           await channel.track({
             id: currentUser.id,
             email: currentUser.email,
             name: currentUser.name,
+            status: 'online' as AgentStatus,
             onlineAt: new Date().toISOString(),
           });
         }
       });
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [teamId, currentUser]);
+    // Activity listeners for away detection
+    const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+    const handleActivity = () => resetAwayTimer();
 
-  return { onlineUsers };
+    for (const event of activityEvents) {
+      window.addEventListener(event, handleActivity, { passive: true });
+    }
+
+    // Start the away timer
+    resetAwayTimer();
+
+    return () => {
+      for (const event of activityEvents) {
+        window.removeEventListener(event, handleActivity);
+      }
+      if (awayTimerRef.current) clearTimeout(awayTimerRef.current);
+      supabase.removeChannel(channel);
+      channelRef.current = null;
+    };
+  }, [teamId, currentUser, resetAwayTimer]);
+
+  return { onlineUsers, updateStatus };
 }
