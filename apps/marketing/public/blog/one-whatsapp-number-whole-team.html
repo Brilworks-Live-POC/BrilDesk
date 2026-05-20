@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Use One WhatsApp Number for Your Entire Sales Team — BrilDesk Blog</title>
+  <meta name="description" content="Learn how to connect multiple agents to one WhatsApp number using the WhatsApp Business API and a shared inbox tool like BrilDesk.">
+  <meta name="keywords" content="multiple agents one whatsapp number, one whatsapp number multiple users, whatsapp team inbox, whatsapp business api shared inbox">
+  <link rel="canonical" href="https://brildesk.com/blog/one-whatsapp-number-whole-team">
+  <meta property="og:title" content="How to Use One WhatsApp Number for Your Entire Sales Team">
+  <meta property="og:description" content="Stop giving each rep a separate phone. Here's how to put your entire sales team on one WhatsApp number.">
+  <meta property="og:type" content="article">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>html{scroll-behavior:smooth}</style>
+</head>
+<body class="antialiased bg-white text-gray-900">
+
+  <!-- Header -->
+  <header class="border-b border-gray-100 bg-white sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <a href="/" class="flex items-center space-x-2">
+        <span class="text-2xl font-bold text-green-600">BrilDesk</span>
+      </a>
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-600">
+        <a href="/" class="hover:text-gray-900">Home</a>
+        <a href="/blog" class="hover:text-gray-900">Blog</a>
+        <a href="/features" class="hover:text-gray-900">Features</a>
+        <a href="/pricing" class="hover:text-gray-900">Pricing</a>
+      </nav>
+      <a href="/beta" class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition">Start Free Beta</a>
+    </div>
+  </header>
+
+  <!-- Article -->
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-600">Home</a> <span class="mx-1">/</span>
+      <a href="/blog" class="hover:text-green-600">Blog</a> <span class="mx-1">/</span>
+      <span class="text-gray-700">One WhatsApp Number, Whole Team</span>
+    </nav>
+
+    <article>
+      <header class="mb-10">
+        <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight mb-4">How to Use One WhatsApp Number for Your Entire Sales Team</h1>
+        <p class="text-lg text-gray-500">Your customers want one number to reach you. Your team needs multiple people answering. Here is how to make both work.</p>
+        <div class="flex items-center mt-6 text-sm text-gray-500">
+          <span>By BrilDesk Team</span>
+          <span class="mx-2">|</span>
+          <time datetime="2026-05-09">May 9, 2026</time>
+          <span class="mx-2">|</span>
+          <span>11 min read</span>
+        </div>
+      </header>
+
+      <div class="prose prose-lg prose-gray max-w-none">
+
+        <p>Here is a question every growing sales team asks: "How do we get <strong>multiple agents on one WhatsApp number</strong>?"</p>
+
+        <p>Your business card says one number. Your website shows one number. Your Google Ads click-to-WhatsApp campaigns point to one number. But behind that number, you need 5, 10, or 50 reps handling conversations simultaneously.</p>
+
+        <p>The regular WhatsApp app does not allow this. WhatsApp Business app barely allows it (one phone plus a few linked devices). But there is a proper solution: the WhatsApp Business API combined with a shared inbox tool. This guide walks you through every option, explains the tradeoffs, and shows you how to set up <strong>multiple agents on one WhatsApp number</strong> the right way.</p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">The Problem with Personal Phones</h2>
+
+        <p>Let us start with why this question comes up in the first place. In most SMB sales teams, especially in India, the Gulf, and Southeast Asia, the setup looks something like this:</p>
+
+        <ul class="list-disc pl-6 mb-6">
+          <li>Each rep has their own phone with their own WhatsApp number</li>
+          <li>Leads are manually distributed ("Priya, you take this one")</li>
+          <li>Customers save the rep's personal number, not the company number</li>
+          <li>When a rep is unavailable, their leads go dark</li>
+          <li>When a rep leaves, their leads leave too</li>
+        </ul>
+
+        <p>The alternative — sharing one phone — is even worse. Reps pass around a physical device. Nobody knows who replied to what. Messages get mixed up. It is chaos.</p>
+
+        <p>What you actually need is one WhatsApp number that <strong>multiple agents</strong> can access simultaneously from their own devices, with proper routing, assignment, and visibility. Let us look at the three ways to achieve this.</p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Option 1: WhatsApp Multi-Device (Limited)</h2>
+
+        <p>WhatsApp introduced multi-device support, which lets you link up to 4 additional devices (via WhatsApp Web or desktop app) to one phone. WhatsApp Business app also supports this.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">How It Works</h3>
+        <p>One primary phone stays connected. Up to 4 linked devices (laptops or desktops) can send and receive messages. Each linked device works independently — it does not need the phone to be online.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">The Limitations</h3>
+        <ul class="list-disc pl-6 mb-6">
+          <li><strong>Maximum 5 users total</strong> — fine for a micro team, useless for a real sales operation</li>
+          <li><strong>No conversation assignment</strong> — everyone sees everything, no one owns anything</li>
+          <li><strong>No routing rules</strong> — new messages are not directed to available reps</li>
+          <li><strong>No analytics</strong> — no response time tracking, no performance metrics</li>
+          <li><strong>No collision prevention</strong> — two agents can reply to the same message</li>
+        </ul>
+
+        <p><strong>Verdict:</strong> Multi-device is a hack, not a solution. It works for 2-3 people who sit next to each other and can verbally coordinate. For any real sales team, it breaks down fast.</p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Option 2: WhatsApp Business API + Custom Build</h2>
+
+        <p>The WhatsApp Business API (also called Cloud API) is Meta's official programmatic interface for WhatsApp. It allows unlimited users on one number, message templates, automation, and integrations. This is the infrastructure that powers every serious WhatsApp business tool.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">How It Works</h3>
+        <p>You register your phone number with Meta's WhatsApp Business Platform. You build (or hire someone to build) a custom web application that connects to the API. Your reps use this web application instead of the WhatsApp app.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">The Limitations</h3>
+        <ul class="list-disc pl-6 mb-6">
+          <li><strong>Significant development effort</strong> — you need backend engineers, frontend developers, and DevOps</li>
+          <li><strong>Ongoing maintenance</strong> — Meta updates the API regularly, and you need to keep up</li>
+          <li><strong>Compliance complexity</strong> — message templates need approval, there are 24-hour window rules, and pricing changes frequently</li>
+          <li><strong>Time to build</strong> — a basic working inbox takes 3-6 months of development</li>
+        </ul>
+
+        <p><strong>Verdict:</strong> Building on the API directly makes sense if you are a large enterprise with unique requirements and an engineering team to maintain the integration. For SMBs, this is overkill. You would spend months building what already exists.</p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Option 3: Shared Inbox Tool (The Right Answer)</h2>
+
+        <p>A shared inbox tool like BrilDesk sits on top of the WhatsApp Business API and gives you a ready-made, professionally designed interface for <strong>multiple agents on one WhatsApp number</strong>. No development required. No API maintenance. Just sign up, connect your number, and start selling.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">What You Get</h3>
+        <ul class="list-disc pl-6 mb-6">
+          <li><strong>Unlimited agents</strong> on one WhatsApp number</li>
+          <li><strong>Automatic routing</strong> of incoming messages to available reps</li>
+          <li><strong>Conversation ownership</strong> with clear assignment</li>
+          <li><strong>Manager visibility</strong> into all conversations and rep performance</li>
+          <li><strong>CRM integration</strong> for automatic data sync</li>
+          <li><strong>Message templates</strong> and quick replies</li>
+          <li><strong>Analytics dashboard</strong> with response times, conversion rates, and more</li>
+        </ul>
+
+        <p><strong>Verdict:</strong> For any SMB sales team that needs <strong>multiple agents on one WhatsApp number</strong>, a shared inbox tool is the clear winner. It gives you all the benefits of the API without the engineering overhead.</p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Step-by-Step: Setting Up Multiple Agents on One WhatsApp Number with BrilDesk</h2>
+
+        <p>Here is exactly how to go from "reps on personal phones" to "whole team on one number" using BrilDesk. The entire process takes about 15 minutes.</p>
+
+        <div class="bg-gray-50 rounded-xl p-6 my-8">
+          <h3 class="text-xl font-semibold mb-4">Step 1: Sign Up for BrilDesk</h3>
+          <p>Create your BrilDesk account at brildesk.com. No credit card required for the beta. You will need your business email and basic company information.</p>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-6 my-8">
+          <h3 class="text-xl font-semibold mb-4">Step 2: Connect Your WhatsApp Number</h3>
+          <p>BrilDesk walks you through the WhatsApp Business API setup. You will need:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li>A Facebook Business Manager account (free to create)</li>
+            <li>A phone number to register (can be your existing business number)</li>
+            <li>Basic business verification documents</li>
+          </ul>
+          <p class="mt-2">The embedded signup flow handles the Meta verification. Most businesses are approved within a few hours. If you are using an existing WhatsApp Business number, you will need to disconnect it from the app first — BrilDesk guides you through this migration.</p>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-6 my-8">
+          <h3 class="text-xl font-semibold mb-4">Step 3: Invite Your Team</h3>
+          <p>Add your sales reps by email. Each rep gets their own login and sees a personalized inbox showing conversations assigned to them. Managers get an admin view with access to all conversations and analytics.</p>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-6 my-8">
+          <h3 class="text-xl font-semibold mb-4">Step 4: Configure Routing Rules</h3>
+          <p>Set up how incoming messages should be distributed. Options include:</p>
+          <ul class="list-disc pl-6 mt-2">
+            <li><strong>Round-robin:</strong> Each new conversation goes to the next available rep</li>
+            <li><strong>Load-balanced:</strong> Goes to the rep with the fewest active conversations</li>
+            <li><strong>Region-based:</strong> Route based on the customer's phone number prefix</li>
+            <li><strong>Source-based:</strong> Different routing for leads from ads vs. organic</li>
+            <li><strong>Manual:</strong> All conversations land in a queue and reps claim them</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-6 my-8">
+          <h3 class="text-xl font-semibold mb-4">Step 5: Set Up Templates and Quick Replies</h3>
+          <p>Create pre-approved message templates for common scenarios: initial greeting, pricing info, follow-up after demo, contract sent. Reps can send these in one click instead of typing from scratch every time.</p>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-6 my-8">
+          <h3 class="text-xl font-semibold mb-4">Step 6: Start Selling</h3>
+          <p>Your team is now live. <strong>Multiple agents on one WhatsApp number</strong>, each with their own assigned conversations, all managed from one dashboard. Customers see one number, your team sees their individual workload, and managers see everything.</p>
+        </div>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Best Practices for Team WhatsApp Setup</h2>
+
+        <p>Once you have your team on one number, here are proven practices to get the most out of the setup:</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">1. Set Response Time SLAs</h3>
+        <p>Define a maximum response time (e.g., 3 minutes during business hours) and track it in your dashboard. WhatsApp customers expect fast replies. Measure it, track it, improve it.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">2. Use Internal Notes, Not Side Chats</h3>
+        <p>When reps need to collaborate on a deal, use internal notes within the conversation thread rather than separate WhatsApp groups or Slack messages. This keeps all context in one place and makes handoffs seamless.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">3. Standardize Your Message Templates</h3>
+        <p>Create templates for every stage of your sales process. First response, qualification questions, pricing, follow-up, closing. This ensures consistency and saves time. Let reps personalize the templates, but give them a starting structure.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">4. Set Up After-Hours Auto-Replies</h3>
+        <p>Customers message at all hours. If nobody is available, an auto-reply that acknowledges the message and sets expectations ("We'll reply within 2 hours") is infinitely better than silence.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">5. Review Conversations Weekly</h3>
+        <p>Managers should review a sample of conversations each week. This is not about catching mistakes — it is about coaching. Look at how reps handle objections, how they follow up, and where deals stall. A shared inbox makes this review possible for the first time.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">6. Keep Your Number Clean</h3>
+        <p>Do not spam. WhatsApp has strict quality ratings, and if too many customers mark your messages as spam, your number can be restricted. Use templates responsibly, get opt-in before outreach, and always provide value in every message.</p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Frequently Asked Questions</h2>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">Can I keep my existing WhatsApp Business number?</h3>
+        <p>Yes. You can migrate your existing number to the WhatsApp Business API. You will need to disconnect it from the WhatsApp Business app first, but your number stays the same and customers will not notice any change.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">Will I lose my existing chat history?</h3>
+        <p>Chat history from the WhatsApp app does not transfer to the API. However, all new conversations from the moment you connect will be stored in BrilDesk permanently. Most teams find that starting fresh in a proper system is worth the tradeoff.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">Is there a limit to how many agents can use one number?</h3>
+        <p>With the WhatsApp Business API and a shared inbox tool, there is no practical limit. Whether you have 5 reps or 500, they can all operate from one number. BrilDesk supports <strong>multiple agents on one WhatsApp number</strong> with no cap on team size.</p>
+
+        <h3 class="text-xl font-semibold mt-8 mb-3">How much does WhatsApp Business API cost?</h3>
+        <p>Meta charges per conversation (not per message). Pricing varies by region and conversation type. Business-initiated conversations cost more than user-initiated ones. BrilDesk handles the API billing transparently — you pay one predictable per-seat price, and we handle the rest.</p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Stop Splitting Your Customers Across 10 Numbers</h2>
+
+        <p>Your customers want to reach your business at one number. Your team needs the ability for <strong>multiple agents</strong> to handle those conversations simultaneously. The WhatsApp Business API and a shared inbox tool make this possible today, without engineering resources and without months of setup.</p>
+
+        <p>BrilDesk is built for this exact use case. Sales teams in India, Dubai, and Southeast Asia who sell on WhatsApp and need to scale beyond personal phones. One number, your whole team, full visibility, zero lost leads.</p>
+
+      </div>
+    </article>
+
+    <!-- CTA Banner -->
+    <div class="mt-16 bg-green-600 rounded-2xl p-8 sm:p-12 text-center text-white">
+      <h2 class="text-2xl sm:text-3xl font-bold mb-3">Set up your team inbox in 5 minutes</h2>
+      <p class="text-green-100 text-lg mb-6 max-w-xl mx-auto">Connect your WhatsApp number, invite your reps, and start selling from one unified inbox. Free during beta.</p>
+      <a href="/beta" class="inline-flex items-center px-8 py-3 bg-white text-green-700 font-bold rounded-lg hover:bg-green-50 transition text-lg">Start Free Beta &rarr;</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 mt-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+          <span class="text-xl font-bold text-green-600">BrilDesk</span>
+          <p class="mt-3 text-sm text-gray-500">The WhatsApp shared inbox built for sales teams.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm text-gray-900 mb-3">Product</h4>
+          <ul class="space-y-2 text-sm text-gray-500">
+            <li><a href="/features" class="hover:text-gray-900">Features</a></li>
+            <li><a href="/pricing" class="hover:text-gray-900">Pricing</a></li>
+            <li><a href="/beta" class="hover:text-gray-900">Join Beta</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm text-gray-900 mb-3">Resources</h4>
+          <ul class="space-y-2 text-sm text-gray-500">
+            <li><a href="/blog" class="hover:text-gray-900">Blog</a></li>
+            <li><a href="/docs" class="hover:text-gray-900">Documentation</a></li>
+            <li><a href="/changelog" class="hover:text-gray-900">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm text-gray-900 mb-3">Company</h4>
+          <ul class="space-y-2 text-sm text-gray-500">
+            <li><a href="/about" class="hover:text-gray-900">About</a></li>
+            <li><a href="/contact" class="hover:text-gray-900">Contact</a></li>
+            <li><a href="/privacy" class="hover:text-gray-900">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-100 mt-8 pt-8 text-center text-sm text-gray-400">
+        &copy; 2026 BrilDesk. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

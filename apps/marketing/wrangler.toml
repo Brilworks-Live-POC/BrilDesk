@@ -2,9 +2,3 @@ name = "brildesk-marketing"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".vercel/output/static"
-
-[env.production]
-name = "brildesk-marketing-production"
-
-[env.staging]
-name = "brildesk-marketing-staging"

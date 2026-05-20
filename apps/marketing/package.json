@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001",
-    "build": "npx @cloudflare/next-on-pages",
+    "dev": "PORT=${PORT:-3001}; while lsof -i :$PORT -sTCP:LISTEN >/dev/null 2>&1; do PORT=$((PORT+1)); done; echo \"Starting on port $PORT\"; next dev --port $PORT",
+    "build": "next build",
+    "pages:build": "npx @cloudflare/next-on-pages",
     "preview": "npx wrangler pages dev .vercel/output/static --compatibility-flags=nodejs_compat",
     "deploy": "npx wrangler pages deploy .vercel/output/static",
     "typecheck": "tsc --noEmit",
