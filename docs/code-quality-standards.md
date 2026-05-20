@@ -217,6 +217,33 @@ The project does not yet have a unit/integration testing framework configured. T
 | Integration tests | API route handlers with real Supabase (test project) | High |
 | E2E tests | Critical user flows (login, send message, view inbox) | Medium |
 
+## OWASP Top 10 Mitigation
+
+How each OWASP Top 10 vulnerability category is addressed in BrilDesk, grounded in the actual codebase.
+
+| # | Vulnerability | Mitigation | Implementation |
+|---|---|---|---|
+| A01 | **Broken Access Control** | Role-based JWT claims; auth middleware on every protected route; comprehensive RLS policies on all database tables | `apps/api/src/middleware/auth.ts` — JWT validation + `requireRole()` guard. `supabase/migrations/20250516000001_foundation.sql` — RLS policies for superadmin, team-scoped, and role-based access |
+| A02 | **Cryptographic Failures** | Password hashing delegated to Supabase Auth (bcrypt internally); TLS enforced by Cloudflare edge; secrets in env vars, never in source | `wrangler secret put` for production secrets; `.env` excluded via `.gitignore` |
+| A03 | **Injection** | Parameterized queries via Supabase client SDK (no raw SQL concatenation); Zod input validation at every API endpoint | `apps/api/src/routes/*.ts` — all routes use `z.object().safeParse()` before processing |
+| A04 | **Insecure Design** | Defense-in-depth: Zod validation at API boundary, RLS at database layer, auth middleware between them | Layered architecture enforces security at multiple levels |
+| A05 | **Security Misconfiguration** | CORS restricted to explicit origins (`localhost:3000`, `app.brildesk.com`); credentials-only mode; Cloudflare edge security defaults | `apps/api/src/index.ts:21-29` — CORS config with explicit allowed origins, headers, and methods |
+| A06 | **Vulnerable Components** | pnpm lockfile for deterministic installs; Node >=20 (active LTS) | **Gap:** no automated `npm audit` in CI — recommended to add Snyk or `pnpm audit` step |
+| A07 | **Authentication Failures** | Supabase Auth handles session management, token issuance, and rate limiting; API disables auto-refresh to prevent token loops | `apps/api/src/middleware/auth.ts:23` — `autoRefreshToken: false`. **Gap:** no custom OTP/2FA or per-user attempt tracking beyond Supabase defaults |
+| A08 | **Software and Data Integrity** | HMAC-SHA256 webhook signature verification for WhatsApp inbound webhooks; Zod schema validation on all deserialized inputs | `apps/api/src/routes/webhooks.ts:169-192` — verifies `X-Hub-Signature-256` via Web Crypto API |
+| A09 | **Logging and Monitoring** | Hono request logger on all routes; `audit_logs` table tracks user actions (message send, reassignment, config changes) with user_id, action, entity, timestamp | `apps/api/src/index.ts:20` — `logger()` middleware. `apps/web/src/lib/audit.ts` — audit event logging. `supabase/migrations/20250516000001_foundation.sql:108-120` — `audit_logs` table |
+| A10 | **Server-Side Request Forgery** | JSON-only API surface (no XML parsing); outbound requests limited to WhatsApp Graph API with configured base URL | No user-controlled URL fetching in the codebase |
+
+### Known Gaps and Recommendations
+
+| Gap | Risk | Recommended Action | Priority |
+|---|---|---|---|
+| No rate limiting | Brute force on login/API endpoints | Add Cloudflare rate limiting rules or Hono rate-limit middleware | High |
+| No CSP headers | XSS risk reduction | Add Content-Security-Policy via Cloudflare response headers or Next.js config | Medium |
+| No automated dependency scanning | Vulnerable packages in production | Add `pnpm audit --audit-level=high` to CI pipeline | Medium |
+| No OTP/2FA | Account takeover risk | Enable Supabase Auth MFA for admin/superadmin roles | Medium |
+| No API request rate limiting | Denial of service | Configure per-IP and per-user rate limits at Cloudflare or app level | High |
+
 ## Environment
 
 - **Node.js:** >=20
