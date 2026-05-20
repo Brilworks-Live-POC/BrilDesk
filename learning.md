@@ -28,6 +28,12 @@ The Cloudflare Pages project requires these env vars set in the **production** e
 
 **Lesson learned:** If env vars are only in preview but not production, the deploy will return a 500 error because the middleware can't connect to Supabase.
 
+### Client-Side Env Var Inlining
+- `NEXT_PUBLIC_*` env vars must be available at **build time** for Next.js to inline them into client-side JavaScript bundles.
+- The shared `@brildesk/supabase` package uses a dynamic `getEnv()` function (`process.env[name]`), but Next.js still inlines the values when the underlying webpack DefinePlugin replaces `process.env.NEXT_PUBLIC_*` before the dynamic lookup.
+- Setting env vars only as Cloudflare Pages runtime env vars is **not enough** — they must be present during `next build`.
+- Solution: create `apps/app/.env.production` with the production `NEXT_PUBLIC_*` values. This file is safe to commit since it only contains public (anon) keys.
+
 ### Build Script
 - `package.json` `build` script is `next build` (not `@cloudflare/next-on-pages`) to avoid recursive invocation when `vercel build` calls `pnpm run build`.
 - Use `pages:build` or run `npx @cloudflare/next-on-pages` directly for Cloudflare Pages builds.
