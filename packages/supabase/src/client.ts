@@ -8,19 +8,15 @@ export type TypedSupabaseClient = SupabaseClient<Database>;
  * Uses the public anon key — all access is governed by RLS.
  */
 export function createBrowserClient(): TypedSupabaseClient {
-  const url = getEnv("NEXT_PUBLIC_SUPABASE_URL");
-  const anonKey = getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
-  return createClient<Database>(url, anonKey);
-}
-
-function getEnv(name: string): string {
-  // Works in both Node (process.env) and edge/browser contexts
-  const value =
-    typeof process !== "undefined" && process.env
-      ? process.env[name]
-      : undefined;
-  if (!value) {
-    throw new Error(`Missing environment variable: ${name}`);
+  // Access process.env.NEXT_PUBLIC_* directly so Next.js can inline
+  // the values at build time. Dynamic access (process.env[name]) does
+  // not get replaced by webpack's DefinePlugin.
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !anonKey) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY"
+    );
   }
-  return value;
+  return createClient<Database>(url, anonKey);
 }
