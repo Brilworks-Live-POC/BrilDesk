@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'brildesk-v1';
+const CACHE_NAME = 'brildesk-v2';
 
 // Assets to precache for offline shell
 const PRECACHE_URLS = [
