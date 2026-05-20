@@ -1,0 +1,10 @@
+name = "brildesk-app"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[env.production]
+name = "brildesk-app-production"
+
+[env.staging]
+name = "brildesk-app-staging"
