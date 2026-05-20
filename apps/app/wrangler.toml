@@ -6,5 +6,5 @@ pages_build_output_dir = ".vercel/output/static"
 [env.production]
 name = "brildesk-app-production"
 
-[env.staging]
+[env.preview]
 name = "brildesk-app-staging"
