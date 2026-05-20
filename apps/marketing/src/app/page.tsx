@@ -173,10 +173,10 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="/beta"
+              href="https://app.brildesk.saas-yard.com"
               className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-green-600/25 transition hover:bg-green-700"
             >
-              Join the Beta
+              Get Started
               <ArrowRight className="h-4 w-4" />
             </a>
             <a
@@ -416,10 +416,10 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col items-center gap-3">
             <a
-              href="/beta"
+              href="https://app.brildesk.saas-yard.com"
               className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-green-600/25 transition hover:bg-green-700"
             >
-              Join the Beta — Free for Early Teams
+              Get Started — Free for Early Teams
               <ArrowRight className="h-4 w-4" />
             </a>
             <p className="text-sm text-gray-500">
@@ -440,10 +440,10 @@ export default function HomePage() {
             and start closing more deals as a team.
           </p>
           <a
-            href="/beta"
+            href="https://app.brildesk.saas-yard.com"
             className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-base font-semibold text-green-700 shadow-lg transition hover:bg-green-50"
           >
-            Join the Beta — It&apos;s Free
+            Get Started — It&apos;s Free
             <ArrowRight className="h-4 w-4" />
           </a>
         </div>

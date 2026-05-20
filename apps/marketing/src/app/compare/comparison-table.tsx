@@ -115,7 +115,7 @@ export function CtaBanner() {
         and smart agent routing — at a price that works for growing teams.
       </p>
       <a
-        href="/beta"
+        href="https://app.brildesk.saas-yard.com"
         className="inline-block rounded-lg bg-white px-6 py-3 font-semibold text-green-700 hover:bg-green-50"
       >
         Start Free Trial

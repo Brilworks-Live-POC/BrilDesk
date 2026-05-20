@@ -25,9 +25,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </a>
                 <a
                   href="/beta"
-                  className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+                  className="text-sm text-gray-600 hover:text-gray-900"
                 >
                   Join the Beta
+                </a>
+                <a
+                  href="https://app.brildesk.saas-yard.com"
+                  className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+                >
+                  Get Started
                 </a>
               </nav>
             </div>
