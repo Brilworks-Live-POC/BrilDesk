@@ -37,6 +37,9 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
+    pathname === '/manifest.json' ||
+    pathname === '/sw.js' ||
+    pathname.startsWith('/icons/') ||
     pathname === '/' ||
     pathname.startsWith('/compare') ||
     pathname.startsWith('/beta');
