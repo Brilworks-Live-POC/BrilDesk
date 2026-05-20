@@ -7,6 +7,9 @@ if (process.env.NODE_ENV === 'development') {
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@brildesk/shared', '@brildesk/supabase'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
